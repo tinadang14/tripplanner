@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Travels Homepage</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  </head>
+  <body>
+    {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}
+          <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    <h3>Hello, {{request.session.first_name}}!</h3>
+    <p><a href="{%url 'login:logout' %}">Logout</a></p>
+
+    <h5>Your Trip Schedules</h5>
+    <table class='table table-bordered table-striped text-center'>
+      <tr>
+        <th>Destination</th>
+        <th>Travel Start Date</th>
+        <th>Travel End Date</th>
+        <th>Plan</th>
+      </tr>
+      {%if trips%}
+      {%for item in trips%}
+      <tr>
+        <td><a href="{%url 'travels:destination' id=item.id%}">{{item.place}}</a></td>
+        <td>{{item.start_date}}</td>
+        <td>{{item.end_date}}</td>
+        <td>{{item.plan}}</td>
+      </tr>
+      {% endfor %}
+      {% endif %}
+    </table>
+
+    <h5>Other Users' Travel Plans</h5>
+    <table class='table table-bordered table-striped text-center'>
+      <tr>
+        <th>Name</th>
+        <th>Destination</th>
+        <th>Travel Start Date</th>
+        <th>Travel End Date</th>
+        <th>Do You Want To Join?</th>
+      </tr>
+      {%if all_trips%}
+      {%for item in all_trips%}
+      <tr>
+        <td>{{item.creator.first_name}} {{item.creator.last_name}}</td>
+        <td><a href="{%url 'travels:destination' id=item.id%}">{{item.place}}</a></td>
+        <td>{{item.start_date}}</td>
+        <td>{{item.end_date}}</td>
+        <td><a href="{%url 'travels:jointrip' id=item.id%}">Join</a></td>
+      {% endfor %}
+      {% endif %}
+    </tr>
+    </table>
+
+    <h5><a href="{%url 'travels:add' %}">Add Travel Plan</a></h5>
+
+  </body>
+</html>
